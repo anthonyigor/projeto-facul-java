@@ -9,52 +9,67 @@ import entity.Turma;
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
+        boolean continuar = true;
         
-        //menu
-        System.out.println("Bem vindo(a) ao nosso sistema, o que deseja fazer hoje? \n[1] Cadastrar aluno \n[2] Cadastrar turma \n[3] Cadastrar disciplina \n[4] Visualizar notas do aluno \n[5] Visualizar turma");
-        String opcao = scanner.nextLine();
+        while (continuar) {
+            // Menu
+            System.out.println("\nBem vindo(a) ao nosso sistema, o que deseja fazer hoje? \n[1] Cadastrar aluno \n[2] Cadastrar turma \n[3] Cadastrar disciplina \n[4] Visualizar notas do aluno \n[5] Visualizar turma \n[6] Sair");
+            String opcao = scanner.nextLine();
 
-        switch (opcao) {
-            case "1":
-            
-                System.out.println("Informe o nome do aluno:");
-                String nome = scanner.nextLine();
-                
-                System.out.println("Informe o login do aluno:");
-                String login = scanner.nextLine();
-                
-                System.out.println("Crie uma senha para o aluno:");
-                String senha = scanner.nextLine();
-                
-                Aluno a = new Aluno(nome, login, senha);
+            switch (opcao) {
+                case "1":
+                    System.out.println("Informe o nome do aluno:");
+                    String nome = scanner.nextLine();
+                    
+                    System.out.println("Informe o login do aluno:");
+                    String login = scanner.nextLine();
+                    
+                    System.out.println("Crie uma senha para o aluno:");
+                    String senha = scanner.nextLine();
+                    
+                    Aluno a = new Aluno(nome, login, senha);
 
-                try {
-                    new AlunoDAO().cadastrarAluno(a);
-                    System.out.println("Aluno(a) " + nome + " criado com sucesso");
+                    try {
+                        AlunoDAO aluno_dao = new AlunoDAO();
 
-                    System.out.println("Deseja adicionar " + nome + " em uma turma? [S/N]");
-                    String adicionarTurma = scanner.nextLine();
+                        aluno_dao.cadastrarAluno(a);
+                        System.out.println("Aluno(a) " + nome + " criado com sucesso");
 
-                   switch (adicionarTurma) {
-                    case "S":
-                        System.out.println("Escolha a turma entre as descritas abaixo:");
+                        System.out.println("Selecione a turma que esse aluno fará parte:");
                         List<Turma> turmas = new TurmaDAO().getTurmas();
                         for (Turma turma : turmas) {
-                            System.out.println(turma.getId() + "-" + turma.getNome());
+                            System.out.printf("[%d] %s", turma.getId(), turma.getNome());
+                            System.out.println();
                         }
-                        break;
-                   
-                    default:
-                        break;
-                   }
+                        int turmaInput = scanner.nextInt();
+                        scanner.nextLine();
+                        
+                        Turma turmaSelecionada = null;
+                        for (Turma turma : turmas) {
+                            if (turma.getId() == turmaInput) {
+                                turmaSelecionada = turma;
+                            }
+                        }
 
-                } catch (Exception e) {
-                    System.out.println("Algo deu errado");
-                }
-                break;
-            default:
-                break;
+                        if (turmaSelecionada != null) {
+                            aluno_dao.atribuirTurma(turmaSelecionada, a);
+                            System.out.printf("Aluno criado e adicionado a turma %s", turmaSelecionada.getNome());
+                        } else {
+                            System.out.println("Opção inválida!");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Algo deu errado");
+                    }
+                    break;
+                case "6":
+                    continuar = false;
+                    System.out.println("Saindo do sistema...");
+                    break;
+                default:
+                    System.out.println("Opção inválida, por favor tente novamente.");
+                    break;
+            }
         }
-
+        scanner.close();
     }
 }

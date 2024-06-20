@@ -9,6 +9,7 @@ public class Aluno {
     private Integer turma_id;
     private String login;
     private String senha;
+    private int id;
 
     // construtor
     public Aluno(String nome, String login, String senha) {
@@ -64,6 +65,12 @@ public class Aluno {
         this.senha = senha;
     }
 
-    
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 
 }
