@@ -11,6 +11,28 @@ import conexao.Conexao;
 import entity.Turma;
 
 public class TurmaDAO {
+
+     public void cadastrarTurma(Turma turma) {
+        String sql = "INSERT INTO TURMAS (nome) VALUES (?)";
+    
+        PreparedStatement ps = null;
+        try {
+            ps = Conexao.getConexao().prepareStatement(sql);
+            ps.setString(1, turma.getNome());
+    
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
     public List<Turma> getTurmas() {
         String sql = "SELECT id, nome FROM TURMAS";

@@ -14,10 +14,11 @@ public class App {
         while (continuar) {
             // Menu
             System.out.println("\nBem vindo(a) ao nosso sistema, o que deseja fazer hoje? \n[1] Cadastrar aluno \n[2] Cadastrar turma \n[3] Cadastrar disciplina \n[4] Visualizar notas do aluno \n[5] Visualizar turma \n[6] Sair");
-            String opcao = scanner.nextLine();
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
 
             switch (opcao) {
-                case "1":
+                case 1:
                     System.out.println("Informe o nome do aluno:");
                     String nome = scanner.nextLine();
                     
@@ -61,7 +62,20 @@ public class App {
                         System.out.println("Algo deu errado");
                     }
                     break;
-                case "6":
+                
+                case 2:
+                    System.out.println("Informe o nome da turma a ser criada:");
+                    String nomeTurma = scanner.nextLine();
+
+                    Turma t = new Turma(nomeTurma);
+                    try {
+                        new TurmaDAO().cadastrarTurma(t);
+                        System.out.printf("Turma %s criada com sucesso!", nomeTurma);
+                    } catch (Exception e) {
+                        System.out.println("Ocorreu um erro ao criar turma");
+                    }
+                    break;
+                case 6:
                     continuar = false;
                     System.out.println("Saindo do sistema...");
                     break;
