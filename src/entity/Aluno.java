@@ -1,5 +1,8 @@
 package entity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Aluno {
     private String nome;
     private String matricula;
@@ -7,12 +10,26 @@ public class Aluno {
     private String login;
     private String senha;
 
+    // construtor
+    public Aluno(String nome, String login, String senha) {
+        this.nome = nome;
+        this.login = login;
+        this.senha = senha;
+        this.matricula = gerarMatricula();
+    }
+
+    public static String gerarMatricula() {
+        Date now = new Date();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMyyyy");
+        String mesAno = dateFormat.format(now);
+        long timestamp = now.getTime();
+
+        return mesAno + timestamp;
+    }
+
     public String getMatricula() {
         return matricula;
-    }
-    
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
     }
 
     public String getNome() {
