@@ -2,6 +2,7 @@ package entity;
 
 public class Turma {
     private String nome;
+    private int id;
 
     // construtor
     public Turma(String nome) {
@@ -14,5 +15,13 @@ public class Turma {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }
