@@ -13,7 +13,7 @@ public class App {
         
         while (continuar) {
             // Menu
-            System.out.println("\nBem vindo(a) ao nosso sistema, o que deseja fazer hoje? \n[1] Cadastrar aluno \n[2] Cadastrar turma \n[3] Cadastrar disciplina \n[4] Visualizar notas do aluno \n[5] Visualizar turma \n[6] Sair");
+            System.out.println("\nBem vindo(a) ao nosso sistema, o que deseja fazer hoje? \n[1] Cadastrar aluno \n[2] Cadastrar turma \n[3] Cadastrar disciplina \n[4] Lançar nota de aluno \n[5] Visualizar notas do aluno \n[6] Visualizar turma \n[7] Sair");
             int opcao = scanner.nextInt();
             scanner.nextLine();
 
