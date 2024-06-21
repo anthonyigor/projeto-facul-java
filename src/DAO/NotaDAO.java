@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import conexao.Conexao;
 import entity.Nota;
@@ -34,31 +36,30 @@ public class NotaDAO {
         }
     }
 
-    public Double getNotaByAlunoIdAndDisciplinaId(int alunoId, int disciplinaId) {
-        String sql = "SELECT n.nota " +
+    public List<Nota> getNotasByDisciplinaId(int disciplinaId) {
+        String sql = "SELECT n.nota, n.aluno_id, n.turma_disciplina_id, a.nome AS aluno_nome " +
                      "FROM Notas n " +
                      "JOIN Alunos a ON n.aluno_id = a.id " +
                      "JOIN Turmas_Disciplinas td ON n.turma_disciplina_id = td.id " +
                      "JOIN Disciplinas d ON td.disciplina_id = d.id " +
-                     "WHERE a.id = ? AND d.id = ?";
+                     "WHERE d.id = ?";
 
-        Double nota = null;
+        List<Nota> notas = new ArrayList<>();
 
         try (Connection conn = Conexao.getConexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, alunoId);
-            ps.setInt(2, disciplinaId);
+            ps.setInt(1, disciplinaId);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    nota = rs.getDouble("nota");
+                while (rs.next()) {
+                    notas.add(new Nota(rs.getInt("aluno_id"), rs.getInt("turma_disciplina_id"), rs.getDouble("nota")));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return nota;
+        return notas;
     }
 }

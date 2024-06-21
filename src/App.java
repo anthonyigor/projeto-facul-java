@@ -294,8 +294,14 @@ public class App {
 
                                 try {
 
-                                    double nota = new NotaDAO().getNotaByAlunoIdAndDisciplinaId(aluno.getId(), disciplinaSelecionada.getId());
-                                    System.err.printf("Materia: [%d] %s -- Nota: %.2f\n", disciplinaSelecionada.getId(), disciplinaSelecionada.getNome(), nota);
+                                    List<Nota> notas = new NotaDAO().getNotasByDisciplinaId(disciplinaSelecionada.getId());
+                                    if(!notas.isEmpty()){
+                                        for (Nota nota : notas) {
+                                            System.out.printf("Materia: [%d] %s -- Nota: %.2f\n", disciplinaSelecionada.getId(), disciplinaSelecionada.getNome(), nota.getNota());
+                                        }
+                                    } else {
+                                        System.out.println("Nenhuma nota encontrada para a disciplina com ID fornecido.");
+                                    }
                                     Thread.sleep(3000);
 
                                 } catch (Exception e) {
