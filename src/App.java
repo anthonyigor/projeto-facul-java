@@ -257,8 +257,18 @@ public class App {
                                     break;
                                 
                                 case 2:
-
-                                    System.out.println("Listar Disciplinas");
+                                    List<Disciplina> disciplinas = new DisciplinaDAO().getDisciplinas();
+                                    if(disciplinas.size() != 0){
+                                        System.out.println("Lista de Disciplinas Cadastradas:\n");
+                                        for (Disciplina disciplina : disciplinas) {
+                                            System.out.printf("Disciplina/cod:[%d] %s", disciplina.getId(), disciplina.getNome());
+                                            System.out.println();
+                                        }
+                                        Thread.sleep(3000);
+                                    }else{
+                                        System.out.println("Nenhuma disciplina encontrada. Cadastre uma disciplina primeiro");
+                                        Thread.sleep(3000);
+                                    }
 
                                     break;
                                 case 3:
