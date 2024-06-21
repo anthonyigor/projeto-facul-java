@@ -19,6 +19,13 @@ public class Aluno {
         this.matricula = gerarMatricula();
     }
 
+    public Aluno(Integer id ,String nome, String matricula, Integer turma_id) {
+        this.id = id;
+        this.nome = nome;
+        this.matricula = matricula;
+        this.turma_id = turma_id;
+    }
+
     public static String gerarMatricula() {
         Date now = new Date();
 

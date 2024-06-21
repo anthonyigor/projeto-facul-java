@@ -52,4 +52,26 @@ public class TurmaDAO {
         }
         return turmas;
     }
+
+    public Turma getTurmaProcurada(Integer id) {
+        String sql = "SELECT * FROM Turmas WHERE id = ?";
+        Turma turma = null;
+
+        try (Connection conn = Conexao.getConexao();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    turma = new Turma(rs.getString("nome"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return turma;
+    }
+
 }

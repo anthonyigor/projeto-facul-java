@@ -1,7 +1,11 @@
 package DAO;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import conexao.Conexao;
 import entity.Aluno;
@@ -56,6 +60,24 @@ public class AlunoDAO {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<Aluno> getAlunos() {
+        String sql = "SELECT * FROM ALUNOS";
+        List<Aluno> alunos = new ArrayList<>();
+
+        try (Connection conn = Conexao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Aluno aluno = new Aluno(rs.getInt("id"), rs.getString("nome"), rs.getString("matricula"), rs.getInt("turma_id"));
+                alunos.add(aluno);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return alunos;
     }
     
 }
