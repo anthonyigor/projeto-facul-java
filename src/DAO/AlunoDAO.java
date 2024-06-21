@@ -79,5 +79,26 @@ public class AlunoDAO {
         }
         return alunos;
     }
+
+    public Aluno getAluno(String matricula) {
+        String sql = "SELECT * FROM ALUNOS WHERE matricula = ?";
+        Aluno aluno = null;
+    
+        try (Connection conn = Conexao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            ps.setString(1, matricula);
+    
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    aluno = new Aluno(rs.getInt("id"), rs.getString("nome"), rs.getString("matricula"), rs.getInt("turma_id"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return aluno;
+    }
+    
     
 }

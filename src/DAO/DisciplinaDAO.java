@@ -94,5 +94,33 @@ public class DisciplinaDAO {
     
         return disciplina;
     }
+
+    public List<Disciplina> getDisciplinasPorAluno(int alunoId) {
+        List<Disciplina> disciplinas = new ArrayList<>();
+        String sql = "SELECT d.id, d.nome " +
+                     "FROM Alunos a " +
+                     "JOIN Turmas_Disciplinas td ON a.turma_id = td.turma_id " +
+                     "JOIN Disciplinas d ON td.disciplina_id = d.id " +
+                     "WHERE a.id = ?";
+
+        try (Connection conn = Conexao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, alunoId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String nome = rs.getString("nome");
+                    Disciplina disciplina = new Disciplina(id, nome);
+                    disciplinas.add(disciplina);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return disciplinas;
+    }
     
 }

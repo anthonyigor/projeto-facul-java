@@ -3,10 +3,12 @@ import java.util.Scanner;
 
 import DAO.AlunoDAO;
 import DAO.DisciplinaDAO;
+import DAO.NotaDAO;
 import DAO.TurmaDAO;
 import DAO.TurmaDisciplinaDAO;
 import entity.Aluno;
 import entity.Disciplina;
+import entity.Nota;
 import entity.Turma;
 import entity.TurmaDisciplina;
 
@@ -127,7 +129,7 @@ public class App {
                                 TurmaDisciplina td = new TurmaDisciplina(turmaSelecionada.getId(), lastdisciplina.getId());
 
                                 new TurmaDisciplinaDAO().criarTurmaDisciplina(td);
-                                System.out.printf("Disciplina %s foi cadastrada na turma %s com Sucesso", turmaSelecionada.getNome(), lastdisciplina.getNome());
+                                System.out.printf("Disciplina %s foi cadastrada na turma %s com Sucesso", lastdisciplina.getNome(), turmaSelecionada.getNome());
                                 System.out.println();
                                 Thread.sleep(3000);
                                 
@@ -145,6 +147,72 @@ public class App {
                         System.out.println("Ocorreu um erro cadastrar disciplina!");
                     }
                     break;
+
+                case 4:
+                    System.out.println("Digite a matricula do aluno para lançar a nota:");
+                    String matricula = scanner.nextLine();
+
+                    try {
+                        Aluno aluno = new AlunoDAO().getAluno(matricula);
+                        if(aluno == null){
+                            System.out.println("Aluno não encontrado!");
+                        }else{
+                            System.out.println();
+                            System.out.printf("Materias do aluno: %s / Matricula: %s \n",aluno.getNome(), aluno.getMatricula());
+                        }
+                        try {
+                            List<Disciplina> disciplinas = new DisciplinaDAO().getDisciplinasPorAluno(aluno.getId());
+                            if(disciplinas.size() !=0){
+                                for(Disciplina disciplina: disciplinas){
+                                    System.out.printf("Cod Materia: [%d] / Nome: %s \n", disciplina.getId(), disciplina.getNome());
+                                }
+                                System.out.println();
+                                System.out.println("Digite o cod da materia para lança a nota:");
+
+                            }else{
+                                System.out.println("Não foi encontrada nenhuma materia!");
+                            }
+
+                            int disciplinaInput = scanner.nextInt();
+                            scanner.nextLine();
+    
+                            Disciplina disciplinaSelecionada = null;
+                            for (Disciplina disciplina : disciplinas) {
+                                if (disciplina.getId() == disciplinaInput) {
+                                    disciplinaSelecionada = disciplina;
+                                }
+                            }
+                            
+                            if(disciplinaSelecionada != null){
+
+                                System.out.println("Digite a nota: EX(7,5 ou 7,50)");
+                                double valorNota = scanner.nextDouble();
+
+                                try {
+                                    int turmaDisciplinaId = new TurmaDisciplinaDAO().getTurmaDisciplinaId(aluno.getTurma_id(), disciplinaSelecionada.getId());
+                                    Nota nota = new Nota(aluno.getId(), turmaDisciplinaId, valorNota);
+                                    new NotaDAO().casdastrarNota(nota);
+
+                                    System.out.println("Nota atribuida com sucesso!");
+                                    Thread.sleep(3000);
+
+                                } catch (Exception e) {
+                                    System.out.println("Ocorreu um erro ao atribuir nota!");
+                                }
+
+                            }else{
+                                System.out.println("Não foi encontrada essa materia!");
+                            }
+
+
+                        } catch (Exception e) {
+                            System.out.println("Ocorreu um erro ao procurar as materias!");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Ocorreu um erro ao procurar aluno!");
+                    }
+                    break;
+
 
                 case 5:
                     try {
