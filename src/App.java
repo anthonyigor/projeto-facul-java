@@ -252,6 +252,76 @@ public class App {
                         break;
                     }
                     break;
+
+                case 7:
+                
+                    try {
+                        System.out.println("Digite a matricula do aluno:");
+                        String matriculaNota = scanner.nextLine();
+                        Aluno aluno = new AlunoDAO().getAluno(matriculaNota);
+
+                        if(aluno == null){
+                            System.out.println("Aluno não encontrado!");
+                        }else{
+                            System.out.println();
+                            System.out.printf("Materias do aluno: %s / Matricula: %s \n",aluno.getNome(), aluno.getMatricula());
+                        }
+
+                        try {
+                            List<Disciplina> disciplinas = new DisciplinaDAO().getDisciplinasPorAluno(aluno.getId());
+                            if(disciplinas.size() !=0){
+                                for(Disciplina disciplina: disciplinas){
+                                    System.out.printf("Cod Materia: [%d] / Nome: %s \n", disciplina.getId(), disciplina.getNome());
+                                }
+                                System.out.println();
+                                System.out.println("Digite o cod da materia para visualizar a nota:");
+
+                            }else{
+                                System.out.println("Não foi encontrada nenhuma materia!");
+                            }
+
+                            int disciplinaInput = scanner.nextInt();
+                            scanner.nextLine();
+    
+                            Disciplina disciplinaSelecionada = null;
+                            for (Disciplina disciplina : disciplinas) {
+                                if (disciplina.getId() == disciplinaInput) {
+                                    disciplinaSelecionada = disciplina;
+                                }
+                            }
+
+                            if(disciplinaSelecionada != null){
+
+                                try {
+
+                                    double nota = new NotaDAO().getNotaByAlunoIdAndDisciplinaId(aluno.getId(), disciplinaSelecionada.getId());
+                                    System.err.printf("Materia: [%d] %s -- Nota: %.2f\n", disciplinaSelecionada.getId(), disciplinaSelecionada.getNome(), nota);
+                                    Thread.sleep(3000);
+
+                                } catch (Exception e) {
+                                    System.out.println("Ocorreu um erro ao lista nota!");
+                                }
+
+                            }else{
+                                System.out.println("Não foi encontrada essa materia!");
+                            }
+                            
+
+
+
+                        }catch (Exception e) {
+                            System.out.println("Ocorreu ao procurar as disciplinas!");
+                        }
+
+                    }catch (Exception e) {
+                        System.out.println("Ocorreu ao procurar aluno!");
+                        System.out.println(e);
+                    }
+                    
+                    
+                    break;
+                
+                
                 case 8:
                     continuar = false;
                     System.out.println("Saindo do sistema...");
