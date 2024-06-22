@@ -264,7 +264,7 @@ public class App {
                                     int turmaSelected = scanner.nextInt();
                                     scanner.nextLine();
                                     Turma turmaEditar = new TurmaDAO().getTurmaProcurada(turmaSelected);
-                                    
+
                                     if (turmaEditar != null) {
                                         System.out.println("Informe o novo nome da turma:");
                                         String novoNome = scanner.nextLine();
@@ -310,7 +310,7 @@ public class App {
                             switch (opcaoSub3) {
                                 case 1:
 
-                                    System.out.println("Selecione a turma para casdastrar disciplina:");
+                                    System.out.println("Selecione a turma para cadastrar disciplina:");
 
                                     try {
                                         List<Turma> turmas = new TurmaDAO().getTurmas();
@@ -381,9 +381,35 @@ public class App {
 
                                     break;
                                 case 3:
-                                    System.out.println("deletar disciplina");
-                                    break;
+                                    System.out.println("Escolha a disciplina que deseja deletar:\n");
+                                    List<Disciplina> disciplinasD = new DisciplinaDAO().getDisciplinas();
+                                    
+                                    if(disciplinasD.size() != 0){
+                                        for (Disciplina disciplina : disciplinasD) {
+                                            System.out.printf("[%d] %s", disciplina.getId(), disciplina.getNome());
+                                            System.out.println();
+                                        }
+                                        int disciplinaSelected = scanner.nextInt();
+                                        scanner.nextLine();
+                                        Disciplina disciplinaDeletar = new DisciplinaDAO().getDisciplinaProcurada(disciplinaSelected);
 
+                                        if (disciplinaDeletar != null) {
+                                            boolean disciplinaDeletada = new DisciplinaDAO().deletarDisciplina(disciplinaDeletar);
+                                            
+                                            if (disciplinaDeletada) {
+                                                System.out.println("Disciplina deletada com sucesso!");
+                                            } else {
+                                                System.out.println("Erro ao deletar disciplina");
+                                            }
+                                        } else {
+                                            System.out.println("Opção inválida");
+                                        }
+
+                                    }else{
+                                        System.out.println("Nenhuma disciplina cadastrada");
+                                    }
+
+                                    break;
                                 case 4:
                                     System.out.println("alterar dados");
                                     break;
@@ -400,8 +426,6 @@ public class App {
                         }
 
                     break;
-
-                
                 
                 case 4:
                     boolean submenu4 = true;

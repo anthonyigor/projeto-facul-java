@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.DocFlavor.STRING;
+
 import conexao.Conexao;
 import entity.Turma;
 
@@ -113,6 +115,7 @@ public class TurmaDAO {
 
         try {
             Connection conn = Conexao.getConexao();
+            // deletar turma
             psDeleteTurma = conn.prepareStatement(deleteTurmaSql);
             psDeleteTurma.setInt(1, turma.getId());
             int linhasAfetadas = psDeleteTurma.executeUpdate();

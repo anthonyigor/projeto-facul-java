@@ -9,6 +9,7 @@ import java.util.List;
 
 import conexao.Conexao;
 import entity.Disciplina;
+import entity.Turma;
 
 
 public class DisciplinaDAO {
@@ -121,6 +122,37 @@ public class DisciplinaDAO {
         }
 
         return disciplinas;
+    }
+
+     public boolean deletarDisciplina(Disciplina disciplina) {
+        String deleteDisciplinaSql = "DELETE FROM Disciplinas WHERE id = ?";
+
+        PreparedStatement ps = null;
+
+        try {
+            Connection conn = Conexao.getConexao();
+
+            ps = conn.prepareStatement(deleteDisciplinaSql);
+            ps.setInt(1, disciplina.getId());
+            int linhasAfetadas = ps.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
     
 }
