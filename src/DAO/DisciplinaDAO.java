@@ -124,6 +124,37 @@ public class DisciplinaDAO {
         return disciplinas;
     }
 
+    public boolean updateDisciplina(Integer id_disciplina, String novoNome) {
+        String sql = "UPDATE DISCIPLINAS SET NOME = ? WHERE ID = ?";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = Conexao.getConexao().prepareStatement(sql);
+            ps.setString(1, novoNome);
+            ps.setInt(2, id_disciplina);
+
+            int linhasAfetadas = ps.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
      public boolean deletarDisciplina(Disciplina disciplina) {
         String deleteDisciplinaSql = "DELETE FROM Disciplinas WHERE id = ?";
 

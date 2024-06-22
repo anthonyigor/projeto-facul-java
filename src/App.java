@@ -294,8 +294,6 @@ public class App {
                         }
                     
                     }  
-
-
                     break;
                 
                 case 3:
@@ -411,7 +409,35 @@ public class App {
 
                                     break;
                                 case 4:
-                                    System.out.println("alterar dados");
+                                    System.out.println("Escolha a disciplina que deseja editar:");
+                                    List<Disciplina> disciplinasU = new DisciplinaDAO().getDisciplinas();
+                                    
+                                    if (disciplinasU.size() != 0) {
+                                        for (Disciplina disciplina : disciplinasU) {
+                                            System.out.printf("[%d] %s", disciplina.getId(), disciplina.getNome());
+                                            System.out.println();
+                                        }
+                                        int disciplinaSelected = scanner.nextInt();
+                                        scanner.nextLine();
+                                        Disciplina disciplinaEditar = new DisciplinaDAO().getDisciplinaProcurada(disciplinaSelected);
+
+                                        if (disciplinaEditar != null) {
+                                            System.out.println("Informe o novo nome da disciplina:");
+                                            String novoNome = scanner.nextLine();
+                                            
+                                            boolean editado = new DisciplinaDAO().updateDisciplina(disciplinaEditar.getId(), novoNome);
+                                            if (editado) {
+                                                System.out.println("Disciplina editada com sucesso!");
+                                            } else {
+                                                System.out.println("Ocorreu um erro ao editar disciplina");
+                                            }
+                                        } else {
+                                            System.out.println("Opção inválida");
+                                        }
+
+                                    } else {
+                                        System.out.println("Nenhuma disciplina cadastrada");
+                                    }
                                     break;
                                 
                                 case 5:
