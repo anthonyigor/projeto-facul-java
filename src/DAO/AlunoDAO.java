@@ -140,6 +140,31 @@ public class AlunoDAO {
         }
         return false;
     }
+
+    public void updateAluno(Aluno aluno, Aluno updatedAluno) {
+        String sql = "UPDATE ALUNOS SET NOME = ?, LOGIN = ?, SENHA = ? WHERE MATRICULA = ?";
+    
+        PreparedStatement ps = null;
+        try {
+            ps = Conexao.getConexao().prepareStatement(sql);
+            ps.setString(1, updatedAluno.getNome());
+            ps.setString(2, updatedAluno.getLogin());
+            ps.setString(3, updatedAluno.getSenha());
+            ps.setString(4, aluno.getMatricula());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
     
 }

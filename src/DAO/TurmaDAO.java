@@ -65,6 +65,7 @@ public class TurmaDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     turma = new Turma(rs.getString("nome"));
+                    turma.setId(rs.getInt("id"));
                 }
             }
         } catch (SQLException e) {
@@ -72,6 +73,67 @@ public class TurmaDAO {
         }
 
         return turma;
+    }
+
+    public boolean updateTurma(Integer id_turma, String novoNome) {
+        String sql = "UPDATE TURMAS SET NOME = ? WHERE ID = ?";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = Conexao.getConexao().prepareStatement(sql);
+            ps.setString(1, novoNome);
+            ps.setInt(2, id_turma);
+
+            int linhasAfetadas = ps.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean deletarTurma(Turma turma) {
+        String deleteTurmaSql = "DELETE FROM Turmas WHERE id = ?";
+
+        PreparedStatement psDeleteTurma = null;
+
+        try {
+            Connection conn = Conexao.getConexao();
+            psDeleteTurma = conn.prepareStatement(deleteTurmaSql);
+            psDeleteTurma.setInt(1, turma.getId());
+            int linhasAfetadas = psDeleteTurma.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (psDeleteTurma != null) {
+                    psDeleteTurma.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
 }

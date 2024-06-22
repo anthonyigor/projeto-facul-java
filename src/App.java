@@ -113,7 +113,7 @@ public class App {
                             
                                 break;
                             case 3:
-                                System.out.println("Digite a matricula do aluno que queira deletar:\n");
+                                System.out.println("Digite a matricula do aluno que deseja deletar:\n");
                                 String matricula = scanner.nextLine();
             
                                 try {
@@ -141,8 +141,37 @@ public class App {
                                 break;
 
                             case 4:
-                                System.out.println("Alterar Dados");
+                                System.out.println("Digite a matricula do aluno que deseja editar:\n");
+                                String matriculaa = scanner.nextLine();
+                                
+                                try {
+                                    Aluno aluno = new AlunoDAO().getAluno(matriculaa);
+                                    if(aluno == null){
+                                        System.out.println("Aluno não encontrado!");
+                                    }else{
+                                        try {
+                                            System.out.println("Informe o nome do aluno:");
+                                            String nomeU = scanner.nextLine();
+                                            
+                                            System.out.println("Informe o novo login do aluno:");
+                                            String loginU = scanner.nextLine();
+                                            
+                                            System.out.println("Crie uma nova senha para o aluno:");
+                                            String senhaU = scanner.nextLine();
+                                    
+                                            Aluno updated = new Aluno(nomeU, loginU, senhaU);
+                                            new AlunoDAO().updateAluno(aluno, updated);
+                                            System.out.printf("Aluno %s editado com sucesso!", updated.getNome());
+                                        } catch (Exception e) {
+                                            System.out.println("Ocorreu um erro ao editar o aluno");
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Ocorreu ao procurar pelo Aluno");
+                                    System.out.println(e);
+                                }
                                 break;
+
                             case 5:
                                 submenu1 = false;
                                 break;
@@ -194,10 +223,66 @@ public class App {
 
                                 break;
                             case 3:
-                                System.out.println("DEletar turma");
+                                System.out.println("Escolha a turma que deseja deletar:\n");
+                                List<Turma> turmasD = new TurmaDAO().getTurmas();
+                                
+                                if(turmasD.size() != 0){
+                                    for (Turma turma : turmasD) {
+                                        System.out.printf("[%d] %s", turma.getId(), turma.getNome());
+                                        System.out.println();
+                                    }
+                                    int turmaSelected = scanner.nextInt();
+                                    scanner.nextLine();
+                                    Turma turmaADeletar = new TurmaDAO().getTurmaProcurada(turmaSelected);
+
+                                    if (turmaADeletar != null) {
+                                        boolean turmaDeletada = new TurmaDAO().deletarTurma(turmaADeletar);
+                                        
+                                        if (turmaDeletada) {
+                                            System.out.println("Turma deletada com sucesso!");
+                                        } else {
+                                            System.out.println("Erro ao deletar turma");
+                                        }
+                                    } else {
+                                        System.out.println("Opção inválida");
+                                    }
+
+                                }else{
+                                    System.out.println("Nenhuma turma cadastrada");
+                                }
+
                                 break;
                             case 4:
-                                System.out.println("Alterar Dados");
+                                System.out.println("Escolha a turma que deseja editar:");
+                                List<Turma> turmasU = new TurmaDAO().getTurmas();
+                                
+                                if (turmasU.size() != 0) {
+                                    for (Turma turma : turmasU) {
+                                        System.out.printf("[%d] %s", turma.getId(), turma.getNome());
+                                        System.out.println();
+                                    }
+                                    int turmaSelected = scanner.nextInt();
+                                    scanner.nextLine();
+                                    Turma turmaEditar = new TurmaDAO().getTurmaProcurada(turmaSelected);
+                                    
+                                    if (turmaEditar != null) {
+                                        System.out.println("Informe o novo nome da turma:");
+                                        String novoNome = scanner.nextLine();
+                                        
+                                        boolean editado = new TurmaDAO().updateTurma(turmaEditar.getId(), novoNome);
+                                        if (editado) {
+                                            System.out.println("Turma editada com sucesso!");
+                                        } else {
+                                            System.out.println("Ocorreu um erro ao editar turma");
+                                        }
+                                    } else {
+                                        System.out.println("Opção inválida");
+                                    }
+
+                                } else {
+                                    System.out.println("Nenhuma turma cadastrada");
+                                }
+
                                 break;
                             case 5:
                                 submenu2 = false;
