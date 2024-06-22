@@ -53,6 +53,8 @@ public class App {
                                     System.out.println("Aluno(a) " + nome + " criado com sucesso");
             
                                     System.out.println("Selecione a turma que esse aluno fará parte:");
+
+                                    // adicionando aluno a uma turma
                                     List<Turma> turmas = new TurmaDAO().getTurmas();
                                     if(turmas.size() != 0){
                                         for (Turma turma : turmas) {
@@ -97,7 +99,11 @@ public class App {
                                             Turma turma = null;
                                             for (Aluno aluno : alunos) {
                                                 turma = turmaDAO.getTurmaProcurada(aluno.getTurma_id());
-                                                System.out.printf("Nome: %s, Matricula: %s, Turma: %s", aluno.getNome(), aluno.getMatricula(), turma.getNome());
+                                                if (turma != null) {
+                                                    System.out.printf("Nome: %s, Matricula: %s, Turma: %s", aluno.getNome(), aluno.getMatricula(), turma.getNome());
+                                                } else {
+                                                    System.out.printf("Nome: %s, Matricula: %s", aluno.getNome(), aluno.getMatricula());
+                                                }
                                                 System.out.println();
                                             }
                                             Thread.sleep(3000);
@@ -160,7 +166,7 @@ public class App {
                                             String senhaU = scanner.nextLine();
                                     
                                             Aluno updated = new Aluno(nomeU, loginU, senhaU);
-                                            new AlunoDAO().updateAluno(aluno, updated);
+                                            new AlunoDAO().updateAluno(aluno.getMatricula(), updated);
                                             System.out.printf("Aluno %s editado com sucesso!", updated.getNome());
                                         } catch (Exception e) {
                                             System.out.println("Ocorreu um erro ao editar o aluno");
@@ -183,7 +189,6 @@ public class App {
                     }
                     
                     break;
-                
                 
                 case 2:
                     boolean submenu2 = true;
@@ -344,7 +349,8 @@ public class App {
                                             try {
                                                 Disciplina lastdisciplina = new DisciplinaDAO().getLastDisciplina();
                                                 TurmaDisciplina td = new TurmaDisciplina(turmaSelecionada.getId(), lastdisciplina.getId());
-                
+                                                
+                                                // atribuindo disciplina a uma turma
                                                 new TurmaDisciplinaDAO().criarTurmaDisciplina(td);
                                                 System.out.printf("Disciplina %s foi cadastrada na turma %s com Sucesso", lastdisciplina.getNome(), turmaSelecionada.getNome());
                                                 System.out.println();
@@ -475,21 +481,23 @@ public class App {
                                         System.out.printf("Materias do aluno: %s / Matricula: %s \n",aluno.getNome(), aluno.getMatricula());
                                     }
                                     try {
+                                        // listando disciplinas do aluno
                                         List<Disciplina> disciplinas = new DisciplinaDAO().getDisciplinasPorAluno(aluno.getId());
                                         if(disciplinas.size() !=0){
                                             for(Disciplina disciplina: disciplinas){
-                                                System.out.printf("Cod Materia: [%d] / Nome: %s \n", disciplina.getId(), disciplina.getNome());
+                                                System.out.printf("Cod Disciplina: [%d] / Nome: %s \n", disciplina.getId(), disciplina.getNome());
                                             }
                                             System.out.println();
-                                            System.out.println("Digite o cod da materia para lança a nota:");
+                                            System.out.println("Digite o cod da disciplina para lançar a nota:");
             
                                         }else{
-                                            System.out.println("Não foi encontrada nenhuma materia!");
+                                            System.out.println("Não foi encontrada nenhuma disciplina!");
                                         }
             
                                         int disciplinaInput = scanner.nextInt();
                                         scanner.nextLine();
-                
+                                        
+                                        // selecionando disciplina que o aluno receberá a nota
                                         Disciplina disciplinaSelecionada = null;
                                         for (Disciplina disciplina : disciplinas) {
                                             if (disciplina.getId() == disciplinaInput) {
@@ -498,7 +506,7 @@ public class App {
                                         }
                                         
                                         if(disciplinaSelecionada != null){
-            
+                                            // atribuindo a nota a disciplina
                                             System.out.println("Digite a nota: EX(7,5 ou 7,50)");
                                             double valorNota = scanner.nextDouble();
             
@@ -542,6 +550,7 @@ public class App {
                                     }
             
                                     try {
+                                        // listando disciplinas do aluno
                                         List<Disciplina> disciplinas = new DisciplinaDAO().getDisciplinasPorAluno(aluno.getId());
                                         if(disciplinas.size() !=0){
                                             for(Disciplina disciplina: disciplinas){
@@ -557,6 +566,7 @@ public class App {
                                         int disciplinaInput = scanner.nextInt();
                                         scanner.nextLine();
                 
+                                        // selecionando disciplina a exibir nota
                                         Disciplina disciplinaSelecionada = null;
                                         for (Disciplina disciplina : disciplinas) {
                                             if (disciplina.getId() == disciplinaInput) {
@@ -567,7 +577,7 @@ public class App {
                                         if(disciplinaSelecionada != null){
             
                                             try {
-            
+                                                // exibindo notas do aluno naquela disciplina
                                                 List<Nota> notas = new NotaDAO().getNotasByDisciplinaId(disciplinaSelecionada.getId());
                                                 if(!notas.isEmpty()){
                                                     for (Nota nota : notas) {
