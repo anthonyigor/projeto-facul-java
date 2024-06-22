@@ -113,7 +113,31 @@ public class App {
                             
                                 break;
                             case 3:
-                                System.out.println("DEletar Aluno");
+                                System.out.println("Digite a matricula do aluno que queira deletar:\n");
+                                String matricula = scanner.nextLine();
+            
+                                try {
+                                    Aluno aluno = new AlunoDAO().getAluno(matricula);
+                                    if(aluno == null){
+                                        System.out.println("Aluno não encontrado!");
+                                    }else{
+                                        try {
+                                            boolean deletado = new AlunoDAO().deletarAluno(aluno.getId());
+                                            if(deletado){
+                                                System.out.printf("Aluno %s deletado com sucesso\n", aluno.getNome());
+                                                Thread.sleep(2000);
+                                            }else{
+                                                System.out.printf("Aluno %s não foi deletado\n", aluno.getNome());
+                                                Thread.sleep(2000);
+                                            }
+                                        } catch (Exception e) {
+                                            System.out.println("Ocorreu um erro ao deletar o aluno");
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Ocorreu ao procurar pelo Aluno");
+                                    System.out.println(e);
+                                }
                                 break;
 
                             case 4:

@@ -99,6 +99,47 @@ public class AlunoDAO {
         }
         return aluno;
     }
+
+    public boolean deletarAluno(int alunoId) {
+        String deleteNotasSql = "DELETE FROM Notas WHERE aluno_id = ?";
+        String deleteAlunoSql = "DELETE FROM Alunos WHERE id = ?";
+    
+        PreparedStatement psDeleteNotas = null;
+        PreparedStatement psDeleteAluno = null;
+    
+        try {
+            Connection conn = Conexao.getConexao();
+            // Deleta as notas do aluno
+            psDeleteNotas = conn.prepareStatement(deleteNotasSql);
+            psDeleteNotas.setInt(1, alunoId);
+            psDeleteNotas.executeUpdate();
+    
+            // Deleta o aluno
+            psDeleteAluno = conn.prepareStatement(deleteAlunoSql);
+            psDeleteAluno.setInt(1, alunoId);
+            int linhasAfetadas = psDeleteAluno.executeUpdate();
+    
+            if (linhasAfetadas > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (psDeleteNotas != null) {
+                    psDeleteNotas.close();
+                }
+                if (psDeleteAluno != null) {
+                    psDeleteAluno.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
     
     
 }
